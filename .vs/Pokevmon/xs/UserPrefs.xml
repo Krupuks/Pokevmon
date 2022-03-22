@@ -1,0 +1,24 @@
+﻿<Properties StartupConfiguration="{95ED20BF-FA84-48EE-B8D6-D0B2C58DB76B}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Pokemon.cs">
+    <Files>
+      <File FileName="Program.cs" Line="1" Column="14" />
+      <File FileName="Pokemon.cs" Line="2" Column="16" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Pokevmon" expanded="True" selected="True">
+            <Node name="Pokevmon" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Pokevmon PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
