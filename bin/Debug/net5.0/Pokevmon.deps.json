@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "Pokémon/1.0.0": {
+      "Pokevmon/1.0.0": {
         "runtime": {
-          "Pokémon.dll": {}
+          "Pokevmon.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Pokémon/1.0.0": {
+    "Pokevmon/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

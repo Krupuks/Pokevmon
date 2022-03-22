@@ -1,0 +1,15 @@
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/Pokevmon.deps.json
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/Pokevmon.runtimeconfig.json
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/Pokevmon.runtimeconfig.dev.json
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/Pokevmon.dll
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/ref/Pokevmon.dll
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/bin/Debug/net5.0/Pokevmon.pdb
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.csproj.AssemblyReference.cache
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.AssemblyInfoInputs.cache
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.AssemblyInfo.cs
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.csproj.CoreCompileInputs.cache
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.dll
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/ref/Pokevmon.dll
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.pdb
+/Users/kevinvanrooy/Documents/GitHub/Pokevmon/obj/Debug/net5.0/Pokevmon.genruntimeconfig.cache
