@@ -88,7 +88,7 @@ namespace Pokevmon
                 else if (input == "pokecenter" || input == "3")
                 {
                     myPikachu.Heal();
-                    Console.WriteLine("Nurse Joy: you're pokemon have been fully restored!");
+                    Console.WriteLine("Nurse Joy: your pokemon have been fully restored!");
                     Console.ReadLine();
                     Console.Clear();
                 }
