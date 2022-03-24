@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Pokevmon
 {
@@ -6,6 +7,7 @@ namespace Pokevmon
     {
         static void Main(string[] args)
         {
+            Draw draw = new Draw();
             /*
             0:Black     1:DarkBlue      2:DarkGreen     3:DarkCyan
             4:DarkRed   5:DarkMagenta   6:DarkYellow    7:Gray
@@ -16,31 +18,27 @@ namespace Pokevmon
             //wild pokémons
             Pokemon pidgey = new("Pidgey", "Nrm/Fly", 16, 5, 40, 56, 45, 40, 35, 35, 50, 6)
             {
-                FrontSprite = new string[] { @"  ___", @" / 0▽0", @"|/_v_v\" },
-                BackSprite = new string[] { @"  ___", @" /    \", @"/  /| \" }
+                Sprite = new string[/*front*/,/*back*/] { { @"  ___", @" / 0▽0", @"|/_v_v\" }, { @"  ___", @" /    \", @"/  /| \" } }
             };
             Pokemon pikachu = new("Pikachu", "Electric", 25, 5, 35, 90, 55, 40, 50, 50, 112, 14)
             {
-                FrontSprite = new string[] { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" },
-                BackSprite = new string[] { @" |\__/|", @" |    |", @" |  ϟ |" }
+                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" |  ϟ |" } }
             };
             Pokemon diglett = new("Diglett", "Ground", 50, 5, 10, 95, 55, 25, 35, 45, 53, 6)
             {
-                FrontSprite = new string[] { @"  ___", @" / 0o0\", @"|_._._|" },
-                BackSprite = new string[] { @"  ___", @" /    \", @"|_._._|" }
+                Sprite = new string[,] { { @"  ___", @" / 0o0\", @"|_._._|" }, { @"  ___", @" /    \", @"|_._._|" } }
             };
             Pokemon mankey = new("Mankey", "Fighting", 56, 5, 40, 70, 80, 35, 35, 45, 61, 7)
             {
-                FrontSprite = new string[] { @" ▽^^^▽", @"<o 0⚇0>", @" O^-^O" },
-                BackSprite = new string[] { @" ▽^^^▽", @"<     >", @" -^-^-" }
+                Sprite = new string[,] { { @" ▽^^^▽", @"<o 0⚇0>", @" O^-^O" },{ @" ▽^^^▽", @"<     >", @" -^-^-" } }
             };
 
             //my pokémon
             Pokemon myPikachu = new("Pikachu ◓", "Electric", 25, 5, 35, 90, 55, 40, 50, 50, 112, 14)
             {
-                FrontSprite = new string[] { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" },
-                BackSprite = new string[] { @" |\__/|", @" |    |", @" |  ϟ |" }
+                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" },{ @" |\__/|", @" |    |", @" |  ϟ |" } }
             };
+
             myPikachu.Heal();
 
             //game loop
@@ -56,7 +54,7 @@ namespace Pokevmon
                 {
                     while (input != "exit" && input != "2")
                     {
-                        myPikachu.DrawStats(0);
+                        draw.Stats(myPikachu,0);
 
                         Console.WriteLine("SELECTION SCREEN\n1.heal(Full Restore)\n2.exit");
 
@@ -64,6 +62,8 @@ namespace Pokevmon
                         Console.Clear();
                         if (input == "heal" || input == "1")
                             myPikachu.Heal();
+                        /*if (input == "")
+                            myPikachu.LevelUp();*/
                     }
                     input = "";
                 }
@@ -72,10 +72,10 @@ namespace Pokevmon
                 {
                     while (input != "exit" && input != "1")
                     {
-                        pidgey.DrawDex(0);
-                        pikachu.DrawDex(1);
-                        diglett.DrawDex(2);
-                        //mankey.DrawDex(3);
+                        draw.Dex(pidgey, 0);
+                        draw.Dex(pikachu, 1);
+                        draw.Dex(diglett, 2);
+                        //draw.Dex(mankey, 3);
 
                         Console.WriteLine("SELECTION SCREEN\n1.exit");
 
@@ -102,22 +102,22 @@ namespace Pokevmon
                         case 1:
                             diglett.Level = randomLvl;
                             diglett.Heal();
-                            Battle(myPikachu, diglett);
+                            Battle(draw, myPikachu, diglett);
                             break;
                         case 2:
                             pidgey.Level = randomLvl;
                             pidgey.Heal();
-                            Battle(myPikachu, pidgey);
+                            Battle(draw, myPikachu, pidgey);
                             break;
                         case 3:
                             mankey.Level = randomLvl;
                             mankey.Heal();
-                            Battle(myPikachu, mankey);
+                            Battle(draw, myPikachu, mankey);
                             break;
                         case 4:
                             pikachu.Level = randomLvl;
                             pikachu.Heal();
-                            Battle(myPikachu, pikachu);
+                            Battle(draw, myPikachu, pikachu);
                             break;
                     }
                 }
@@ -125,7 +125,7 @@ namespace Pokevmon
         }
 
         //code for battling: two pokemons fight untill one faints
-        static void Battle(Pokemon pokemon1, Pokemon pokemon2)
+        static void Battle(Draw draw, Pokemon pokemon1, Pokemon pokemon2)
         {
             if (pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0)
             {
@@ -134,8 +134,8 @@ namespace Pokevmon
 
                 //Visualize battle
                 Console.Clear();
-                pokemon1.DrawBattle(true);
-                pokemon2.DrawBattle(false);
+                draw.Battle(pokemon1,true);
+                draw.Battle(pokemon2,false);
                 Console.ReadLine();
 
                 //battle loop
@@ -145,47 +145,47 @@ namespace Pokevmon
                     if (firstTurn == true)
                     {   //speed will determine who will attack first: first pokemon will attack
                         if (pokemon1.Speed_Full > pokemon2.Speed_Full)
-                            Attack(pokemon1, pokemon2);
-                        ////speed will determine who will attack first: second pokemon will attack
+                            Attack(pokemon1, pokemon2, true);
+                        //speed will determine who will attack first: second pokemon will attack
                         else if (pokemon1.Speed_Full < pokemon2.Speed_Full)
-                            Attack(pokemon2, pokemon1);
+                            Attack(pokemon2, pokemon1, true );
                         // if speed is equal, do a coinflip
                         else
                         {
                             coinFlip = Random(0, 2);
                             if (coinFlip == 0)
-                                Attack(pokemon1, pokemon2);
+                                Attack(pokemon1, pokemon2, true);
                             else if (coinFlip == 1)
-                                Attack(pokemon2, pokemon1);
+                                Attack(pokemon2, pokemon1, true);
                         }
                         Console.Clear();
-                        pokemon1.DrawBattle(true);
-                        pokemon2.DrawBattle(false);
+                        draw.Battle(pokemon1,true);
+                        draw.Battle(pokemon2,false);
                         firstTurn = false;
-                        Console.ReadLine();
+                        Thread.Sleep(500);
                     }
                     //code will run every 2 turns, check if pokemon have fainted yet: if they did, code won't continue
                     else if (firstTurn == false && pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0)
                     {
                         //because pokemon1 started in the first turn, pokemon2 will attack
                         if (pokemon1.Speed_Full > pokemon2.Speed_Full)
-                            Attack(pokemon2, pokemon1);
+                            Attack(pokemon2, pokemon1, true);
 
                         //because pokemon2 started in the first turn, pokemon1 will attack
                         else if (pokemon1.Speed_Full < pokemon2.Speed_Full)
-                            Attack(pokemon1, pokemon2);
+                            Attack(pokemon1, pokemon2, true);
                         //in the second turn, the other pokemon will attack
                         else
                         {
                             if (coinFlip == 0)
-                                Attack(pokemon2, pokemon1);
+                                Attack(pokemon2, pokemon1, true);
                             else if (coinFlip == 1)
-                                Attack(pokemon1, pokemon2);
+                                Attack(pokemon1, pokemon2, true);
                         }
                         //Visualize battle
                         Console.Clear();
-                        pokemon1.DrawBattle(true);
-                        pokemon2.DrawBattle(false);
+                        draw.Battle(pokemon1, true);
+                        draw.Battle(pokemon2, false);
                         firstTurn = true;
                         Console.ReadLine();
                     }
@@ -220,7 +220,7 @@ namespace Pokevmon
                 Console.ReadLine();
                 Console.Clear();
             }
-            // if your pokemons are low, don't start battle
+            // if your pokemons are low, don't start a battle
             else
             {
                 Console.WriteLine("Your Pokemon(s) are unable to battle!");
@@ -228,34 +228,37 @@ namespace Pokevmon
                 Console.Clear();
             }
         }
-
-        //code for special attacks (sp.attack, sp.defense) NOT USED (implement different kind of attacks?)
-        private static void SpAttack(Pokemon pokemon1, Pokemon pokemon2)
+        //code for attacking (attacker, defender)
+        private static void Attack(Pokemon attacker, Pokemon defender, bool IsPhysical)
         {
-            int damage = Random(1, 3) * 2 * (pokemon1.SpAttack_Full / pokemon2.SpDefense_Full) + 2;
-            pokemon2.ReceiveDmg(damage);
-            if (pokemon2.CurrentHP < 0)
+            int damage;
+            double offset = Random(8, 13) / 10.0;
+            double CritChance = Random(0,21);
+            int critHit = 1;
+            if (CritChance == 20)
             {
-                pokemon2.CurrentHP = 0;
+                critHit = 2;
+            } 
+            if (IsPhysical)
+                //code for physical attacks
+                damage = (int)(2 * offset * critHit * (attacker.Attack_Full / defender.Defense_Full) + 2);
+            else
+                //code for special attacks
+                damage = (int)(2 * offset * critHit * (attacker.SpAttack_Full / defender.SpDefense_Full) + 2);
+            defender.ReceiveDmg(damage);
+
+            if (defender.CurrentHP < 0)
+            {
+                defender.CurrentHP = 0;
             }
 
         }
 
-        //code for physical attacks (attack, defense)
-        private static void Attack(Pokemon pokemon1, Pokemon pokemon2)
+        //code for experience calculation (victor, loser)
+        private static int ReceiveExp(Pokemon victor, Pokemon loser)
         {
-            int damage = Random(1, 3) * 2 * (pokemon1.Attack_Full / pokemon2.Defense_Full) + 2;
-            pokemon2.ReceiveDmg(damage);
-            if (pokemon2.CurrentHP < 0)
-            {
-                pokemon2.CurrentHP = 0;
-            }
-        }
-        //code for experience calculation (victor, defeated)
-        private static int ReceiveExp(Pokemon pokemon1, Pokemon pokemon2)
-        {
-            int exp = pokemon2.Exp_Base * pokemon2.Level;
-            pokemon1.ReceiveExp(exp);
+            int exp = loser.Exp_Base * loser.Level;
+            victor.ReceiveExp(exp);
             return exp;
         }
         //integer randomizer 
@@ -266,3 +269,10 @@ namespace Pokevmon
         }
     }
 }
+
+//merged attack and sp.attack method
+//merged front and back method
+//pokedex now show basestats
+//average basestats problem is resolved
+//reworked constructors
+//created seperate class for drawing
