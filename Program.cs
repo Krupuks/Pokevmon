@@ -18,7 +18,7 @@ namespace Pokevmon
             //wild pokémons
             Pokemon pidgey = new("Pidgey", "Nrm/Fly", 16, 5, 40, 56, 45, 40, 35, 35, 50, 6)
             {
-                Sprite = new string[/*front*/,/*back*/] { { @"  ___", @" / 0▽0", @"|/_v_v\" }, { @"  ___", @" /    \", @"/  /| \" } }
+                Sprite = new string[,] { { @"  ___", @" / 0▽0", @"|/_v_v\" }, { @"  ___", @" /    \", @"/  /| \" } }
             };
             Pokemon pikachu = new("Pikachu", "Electric", 25, 5, 35, 90, 55, 40, 50, 50, 112, 14)
             {
@@ -43,6 +43,7 @@ namespace Pokevmon
 
             //game loop
             string input = "";
+            int dexPage = 1;
             while (input != "exit" && input != "5")
             {
                 Console.WriteLine("SELECTION SCREEN\n1.pokemon\n2.pokedex\n3.pokecenter\n4.battle\n5.exit");
@@ -52,37 +53,59 @@ namespace Pokevmon
                 //show pokemon party
                 if (input == "pokemon" || input == "1")
                 {
-                    while (input != "exit" && input != "2")
+                    while (input != "exit" && input != "4")
                     {
                         draw.Stats(myPikachu,0);
 
-                        Console.WriteLine("SELECTION SCREEN\n1.heal(Full Restore)\n2.exit");
+                        Console.WriteLine("SELECTION SCREEN\n1.heal(Potion)\n2.rest(Full Restore)\n3.level(Rare Candy)\n4.exit");
 
                         input = Console.ReadLine();
                         Console.Clear();
                         if (input == "heal" || input == "1")
+                            myPikachu.DrinkPotion();
+
+                        if (input == "rest" || input == "2")
                             myPikachu.Heal();
-                        /*if (input == "")
-                            myPikachu.LevelUp();*/
+
+                        if (input == "level" || input == "3")
+                            myPikachu.EatRareCandy();
                     }
-                    input = "";
                 }
                 //show all pokemon available in the program
                 else if (input == "pokedex" || input == "2")
                 {
-                    while (input != "exit" && input != "1")
+                    while (input != "exit" && input != "3")
                     {
-                        draw.Dex(pidgey, 0);
-                        draw.Dex(pikachu, 1);
-                        draw.Dex(diglett, 2);
-                        //draw.Dex(mankey, 3);
+                        if (dexPage == 3)
+                            dexPage--;
+                        else if (dexPage == 0)
+                            dexPage++;
+                        if (dexPage == 1)
+                        {
+                            draw.Pokedex(pidgey, 0);
+                            draw.Pokedex(pikachu, 1);
+                            draw.Pokedex(diglett, 2);
+                        }
+                        else if (dexPage == 2)
+                        {
+                            draw.Pokedex(mankey, 0);
+                            //draw.Pokedex(pokemon, 1);
+                            //draw.Pokedex(pokemon, 2);
+                        }
 
-                        Console.WriteLine("SELECTION SCREEN\n1.exit");
+                        Console.WriteLine("SELECTION SCREEN\n1.previous\n2.next\n3.exit");
 
                         input = Console.ReadLine();
+                        if (input == "previous" || input == "1")
+                        {
+                            dexPage--;
+                        }
+                        else if (input == "next" || input == "2")
+                        {
+                            dexPage++;
+                        }
                         Console.Clear();
                     }
-                    input = "";
                 }
                 //go to the pokemoncenter to heal your pokemon
                 else if (input == "pokecenter" || input == "3")
@@ -102,22 +125,22 @@ namespace Pokevmon
                         case 1:
                             diglett.Level = randomLvl;
                             diglett.Heal();
-                            Battle(draw, myPikachu, diglett);
+                            Battle(myPikachu, diglett);
                             break;
                         case 2:
                             pidgey.Level = randomLvl;
                             pidgey.Heal();
-                            Battle(draw, myPikachu, pidgey);
+                            Battle(myPikachu, pidgey);
                             break;
                         case 3:
                             mankey.Level = randomLvl;
                             mankey.Heal();
-                            Battle(draw, myPikachu, mankey);
+                            Battle(myPikachu, mankey);
                             break;
                         case 4:
                             pikachu.Level = randomLvl;
                             pikachu.Heal();
-                            Battle(draw, myPikachu, pikachu);
+                            Battle(myPikachu, pikachu);
                             break;
                     }
                 }
@@ -125,8 +148,9 @@ namespace Pokevmon
         }
 
         //code for battling: two pokemons fight untill one faints
-        static void Battle(Draw draw, Pokemon pokemon1, Pokemon pokemon2)
+        static void Battle(Pokemon pokemon1, Pokemon pokemon2)
         {
+            Draw draw = new Draw();
             if (pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0)
             {
                 bool firstTurn = true;
@@ -215,7 +239,10 @@ namespace Pokevmon
                     Console.Write("YOU WON THE BATTLE");
                     Console.ReadLine();
                     Console.SetCursorPosition(3, 14);
-                    Console.Write($"{pokemon1.Name} received {ReceiveExp(pokemon1, pokemon2)} Exp");
+                    if (pokemon2.Level < 100)
+                    {
+                        Console.Write($"{pokemon1.Name} received {ReceiveExp(pokemon1, pokemon2)} Exp");
+                    }
                 }
                 Console.ReadLine();
                 Console.Clear();
@@ -269,10 +296,35 @@ namespace Pokevmon
         }
     }
 }
+//VERSION 1.0 (creation)
+//menu loop
+//pokemon class with stats and UI possibilities
+//pokedex (list of all pokemon)
+//battle and healing system
+//level and exp system
 
+//VERSION 1.1 (fixes)
+//seperate class for drawing UI
 //merged attack and sp.attack method
-//merged front and back method
-//pokedex now show basestats
-//average basestats problem is resolved
+//merged front and back sprite method
+//pokedex now shows basestats instead of fullstats
+//average basestats problem resolved
 //reworked constructors
-//created seperate class for drawing
+
+
+//VERSION 1.2 (fixes)
+//pokemon can't reach higher levels than 100
+//pokemon can't receive exp anymore after lvl100
+//pokemon will keep their hp percentage untill lvl100
+//pokedex now uses pages to navigate
+//improved experience formula for leveling
+
+
+//TO DO'S
+//different moves (physical/special) -> class
+//move versus type effectiveness -> give pokemons arrays for type and moves aswell
+//natures
+//evolution
+//add party system
+//catching & releasing
+

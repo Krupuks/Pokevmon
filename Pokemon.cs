@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Pokevmon
 {
     public class Pokemon
@@ -22,7 +23,7 @@ namespace Pokevmon
         public Pokemon(string name, string type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base) : this( name, type, number, level, hp_base, speed_base, attack_base, defense_base, spattack_base, spdefense_base, exp_base,7) { }
         public Pokemon(string name, string type, int number, int level) : this(name, type, number, level, 10, 10, 10, 10, 10, 10, 50, 7) { }
         public Pokemon(string name, string type, int number) : this(name, type, number, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
-        public Pokemon() : this("Substitute", "No", 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon() : this("Substitute", "no", 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
         #endregion
 
         #region Pokemon information
@@ -35,7 +36,7 @@ namespace Pokevmon
 
         #endregion
 
-        #region Pokemon base stats
+        #region Pokemon static stats
 
         private int hp_Base;
         private int attack_Base;
@@ -58,7 +59,7 @@ namespace Pokevmon
 
         #endregion
 
-        #region Pokemon full stats
+        #region Pokemon relative stats
 
         public int HP_Full { get { return (HP_Base + 50) * Level / 50 + 10; } }
         public int Attack_Full { get { return Attack_Base * Level / 50 + 5; } }
@@ -66,24 +67,28 @@ namespace Pokevmon
         public int SpAttack_Full { get { return SpAttack_Base * Level / 50 + 5; } }
         public int SpDefense_Full { get { return SpDefense_Base * Level / 50 + 5; } }
         public int Speed_Full { get { return Speed_Base * Level / 50 + 5; } }
-        public int Exp_Full { get { return Exp_Base * Level; } }
+        //Medium fast formula
+        public int Exp_NextLvl { get { return (int)Math.Pow(Level + 1, 3) - (int)Math.Pow(Level, 3); } }
+        public int Exp_Max { get { return (int)Math.Pow(Level, 3); } }
 
         #endregion
 
         #region Pokemon dynamic stats
 
-        private int currentHP;
+        private double currentHP;
         private int currentExp;
         private int level;
 
-        public int CurrentHP { get { return currentHP; } set { currentHP = value; } }
+        public double CurrentHP { get { return currentHP; } set { currentHP = value; } }
         public int CurrentExp { get { return currentExp; } set { currentExp = value; } }
+        public int CurrentExpTotal { get { return currentExp + (int)Math.Pow(Level - 1, 3); } }
 
         public int Level {
             get { return level;}
 
             set {
-                if (value <= 100)
+                //can't give pokemon higher levels than 100
+                if (value > 0 && value <= 100)
                 {
                     level = value;
                 }
@@ -96,27 +101,46 @@ namespace Pokevmon
 
         public void LevelUp()
         {
-            Level++;
-            if (Level <= 100)
+            //up untill lvl 99, pokemon current hp will change relative to percentage
+            if (Level < 100)
             {
-                CurrentHP = (HP_Full / CurrentHP) * HP_Full;
+                CurrentHP = CurrentHP / HP_Full * ((HP_Base + 50) * (Level + 1) / 50 + 10);
             }
+            Level++;
+        }
+        public void EatRareCandy()
+        {
+            LevelUp();
+            CurrentExp = 0;
         }
         public void Heal()
         {
             CurrentHP = HP_Full;
         }
+        public void DrinkPotion()
+        {
+            CurrentHP += 20;
+            if (CurrentHP > HP_Full)
+            {
+                CurrentHP = HP_Full;
+            }
+        }
+
+
         public void ReceiveDmg(int damage)
         {
             CurrentHP -= damage;
         }
         public void ReceiveExp(int exp)
         {
-            CurrentExp += exp;
-            if (CurrentExp >= Exp_Full)
+            if (Level < 100)
             {
-                CurrentExp = 0;
-                LevelUp();
+                CurrentExp += exp;
+                while (CurrentExp >= Exp_NextLvl)
+                {
+                    CurrentExp -= Exp_NextLvl;
+                    LevelUp();
+                }
             }
         }
         #endregion

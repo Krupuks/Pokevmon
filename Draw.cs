@@ -32,9 +32,9 @@ namespace Pokevmon
         #endregion
 
         #region Pokemon
-        private int size = 16; //increase size if more data is needed during display
+        private int size = 17; //increase size if more data is needed during display
 
-        private void StatFull(int Full, char x, int pos, int nr)
+        private void FullStat(int Full, char x, int pos, int nr)
         {
             Console.SetCursorPosition(8, 5 + size * nr + pos);
             Console.Write(Full);
@@ -44,7 +44,7 @@ namespace Pokevmon
                 Console.Write(x);
             }
         }
-        private void StatCurrent(int Current, char x, int pos, int nr)
+        private void CurrentStat(int Current, char x, int pos, int nr)
         {
             Console.SetCursorPosition(4, 5 + size * nr + pos);
             Console.Write(Current + "/");
@@ -57,36 +57,39 @@ namespace Pokevmon
         public void Stats(Pokemon pokemon, int layer)
         {
             Draw.HorizontalLine(0, size * layer, 25, '-');
-            Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type} Type\n\nExp\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal: {pokemon.TotalBase}\nAverage: {pokemon.AverageBase}");
+            Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type} Type\n\n\nExp to lvl:\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
 
-            Sprite(pokemon, 17, 1 + size * layer, pokemon.Color, 0);
+            Sprite(pokemon, 18, 1 + size * layer, pokemon.Color, 0);
 
-            Console.SetCursorPosition(0, 5 + size * layer);
-            Console.WriteLine($"{pokemon.CurrentExp}/{pokemon.Exp_Full}");
+            Console.SetCursorPosition(0, 3 + size * layer);
+            Console.WriteLine($"{pokemon.CurrentExpTotal}/{pokemon.Exp_Max} exp");
+            Console.SetCursorPosition(12, 6 + size * layer);
+            Console.WriteLine($"{pokemon.CurrentExp}/{pokemon.Exp_NextLvl}");
+            
             ExpBar(pokemon,12, 5 + size * layer);
-            StatFull(pokemon.HP_Full, '░', 2, layer);
-            StatCurrent(pokemon.CurrentHP, '█', 2, layer);
-            StatFull(pokemon.Speed_Full, '█', 3, layer);
-            StatFull(pokemon.Attack_Full, '█', 4, layer);
-            StatFull(pokemon.Defense_Full, '█', 5, layer);
-            StatFull(pokemon.SpAttack_Full, '█', 6, layer);
-            StatFull(pokemon.SpDefense_Full, '█', 7, layer);
+            FullStat(pokemon.HP_Full, '░', 2, layer);
+            CurrentStat((int)pokemon.CurrentHP, '█', 2, layer);
+            FullStat(pokemon.Speed_Full, '█', 3, layer);
+            FullStat(pokemon.Attack_Full, '█', 4, layer);
+            FullStat(pokemon.Defense_Full, '█', 5, layer);
+            FullStat(pokemon.SpAttack_Full, '█', 6, layer);
+            FullStat(pokemon.SpDefense_Full, '█', 7, layer);
 
             Draw.HorizontalLine(0, size * (layer + 1), 25, '-');
         }
-        public void Dex(Pokemon pokemon, int layer)
+        public void Pokedex(Pokemon pokemon, int layer)
         {
             Draw.HorizontalLine(0, size * layer, 22, '-');
-            Console.WriteLine($"{pokemon.Name} nr.{pokemon.Number}\n{pokemon.Type} Type\n\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal: {pokemon.TotalBase}\nAverage: {pokemon.AverageBase}");
+            Console.WriteLine($"{pokemon.Name} nr.{pokemon.Number}\n{pokemon.Type} Type\n\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
 
             Sprite(pokemon, 15, 1 + size * layer, pokemon.Color, 0);
 
-            StatFull(pokemon.HP_Base, '█', 1, layer);
-            StatFull(pokemon.Speed_Base, '█', 2, layer);
-            StatFull(pokemon.Attack_Base, '█', 3, layer);
-            StatFull(pokemon.Defense_Base, '█', 4, layer);
-            StatFull(pokemon.SpAttack_Base, '█', 5, layer);
-            StatFull(pokemon.SpDefense_Base, '█', 6, layer);
+            FullStat(pokemon.HP_Base, '█', 1, layer);
+            FullStat(pokemon.Speed_Base, '█', 2, layer);
+            FullStat(pokemon.Attack_Base, '█', 3, layer);
+            FullStat(pokemon.Defense_Base, '█', 4, layer);
+            FullStat(pokemon.SpAttack_Base, '█', 5, layer);
+            FullStat(pokemon.SpDefense_Base, '█', 6, layer);
 
             Draw.HorizontalLine(0, size * (layer + 1), 22, '-');
         }
@@ -119,7 +122,7 @@ namespace Pokevmon
             }
 
             Console.ForegroundColor = ConsoleColor.Blue;
-            for (int i = 0; i < pokemon.CurrentExp / (pokemon.Exp_Full * 1.0) * 10; i++)
+            for (int i = 0; i < pokemon.CurrentExp / (pokemon.Exp_NextLvl * 1.0) * 10; i++)
             {
                 Console.SetCursorPosition(posX + i, posY);
                 Console.Write('▄');
