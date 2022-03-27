@@ -1,22 +1,12 @@
 ﻿<Properties StartupConfiguration="{95ED20BF-FA84-48EE-B8D6-D0B2C58DB76B}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Draw.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Draw.cs" Line="69" Column="33" />
-      <File FileName="Program.cs" Line="7" Column="6" />
-      <File FileName="Pokemon.cs" Line="1" Column="1" />
-      <File FileName="Party.cs" Line="10" Column="50" />
+      <File FileName="Program.cs" Line="162" Column="12" IsPinned="True" />
+      <File FileName="Pokemon.cs" IsPinned="True" />
+      <File FileName="Draw.cs" IsPinned="True" />
+      <File FileName="Pokedex.cs" />
+      <File FileName="Pokanics.cs" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Pokevmon" expanded="True">
-            <Node name="Pokevmon" expanded="True">
-              <Node name="Draw.cs" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Pokevmon PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

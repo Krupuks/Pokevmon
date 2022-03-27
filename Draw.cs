@@ -33,7 +33,6 @@ namespace Pokevmon
 
         #region Pokemon
         private int size = 17; //increase size if more data is needed during display
-
         private void FullStat(int Full, char x, int pos, int nr)
         {
             Console.SetCursorPosition(8, 5 + size * nr + pos);
@@ -57,7 +56,7 @@ namespace Pokevmon
         public void Stats(Pokemon pokemon, int layer)
         {
             Draw.HorizontalLine(0, size * layer, 25, '-');
-            Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type} Type\n\n\nExp to lvl:\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
+            Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type} Type\n\n\nExp to lvl:\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
 
             Sprite(pokemon, 18, 1 + size * layer, pokemon.Color, 0);
 
@@ -67,17 +66,17 @@ namespace Pokevmon
             Console.WriteLine($"{pokemon.CurrentExp}/{pokemon.Exp_NextLvl}");
             
             ExpBar(pokemon,12, 5 + size * layer);
-            FullStat(pokemon.HP_Full, '░', 2, layer);
-            CurrentStat((int)pokemon.CurrentHP, '█', 2, layer);
-            FullStat(pokemon.Speed_Full, '█', 3, layer);
-            FullStat(pokemon.Attack_Full, '█', 4, layer);
-            FullStat(pokemon.Defense_Full, '█', 5, layer);
-            FullStat(pokemon.SpAttack_Full, '█', 6, layer);
-            FullStat(pokemon.SpDefense_Full, '█', 7, layer);
+            FullStat(pokemon.HP_Full, '░', 3, layer);
+            CurrentStat((int)pokemon.CurrentHP, '█', 3, layer);
+            FullStat(pokemon.Speed_Full, '█', 4, layer);
+            FullStat(pokemon.Attack_Full, '█', 5, layer);
+            FullStat(pokemon.Defense_Full, '█', 6, layer);
+            FullStat(pokemon.SpAttack_Full, '█', 7, layer);
+            FullStat(pokemon.SpDefense_Full, '█', 8, layer);
 
             Draw.HorizontalLine(0, size * (layer + 1), 25, '-');
         }
-        public void Pokedex(Pokemon pokemon, int layer)
+        public void DexStats(Pokemon pokemon, int layer)
         {
             Draw.HorizontalLine(0, size * layer, 22, '-');
             Console.WriteLine($"{pokemon.Name} nr.{pokemon.Number}\n{pokemon.Type} Type\n\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
@@ -93,7 +92,6 @@ namespace Pokevmon
 
             Draw.HorizontalLine(0, size * (layer + 1), 22, '-');
         }
-
         private void HealthBar(Pokemon pokemon, int posX, int posY)
         {
 
@@ -111,7 +109,6 @@ namespace Pokevmon
             }
             Console.ResetColor();
         }
-
         private void ExpBar(Pokemon pokemon, int posX, int posY)
         {
             Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -129,7 +126,6 @@ namespace Pokevmon
             }
             Console.ResetColor();
         }
-
         private void Sprite(Pokemon pokemon, int posX, int posY, int color, int perspective)
         {
             Console.ForegroundColor = (ConsoleColor)color;
@@ -155,7 +151,7 @@ namespace Pokevmon
                 HealthBar(pokemon,40, 7);
                 ExpBar(pokemon,50, 8);
                 Console.SetCursorPosition(40, 8);
-                Console.WriteLine($"{pokemon.CurrentHP}/{pokemon.HP_Full} Hp");
+                Console.WriteLine($"{Math.Round(pokemon.CurrentHP)}/{pokemon.HP_Full} Hp");
                 Console.SetCursorPosition(50, 9);
                 Sprite(pokemon,24, 7, pokemon.Color, 1);
             }
@@ -165,7 +161,7 @@ namespace Pokevmon
                 Console.WriteLine($"{pokemon.Name} Lvl.{pokemon.Level}");
                 HealthBar(pokemon,40, 3);
                 Console.SetCursorPosition(40, 4);
-                Console.WriteLine($"{pokemon.CurrentHP}/{pokemon.HP_Full} Hp");
+                Console.WriteLine($"{Math.Round(pokemon.CurrentHP)}/{pokemon.HP_Full} Hp");
                 Sprite(pokemon,6, 3, pokemon.Color, 0);
             }
             Console.SetCursorPosition(3, 12);

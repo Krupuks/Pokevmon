@@ -2,10 +2,11 @@
 
 namespace Pokevmon
 {
+    public enum Element { None, Normal, Fire, Water, Electric, Grass, Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost, Dragon, Steel, Dark, Fairy }
     public class Pokemon
     {
         #region Constructors
-        public Pokemon(string name, string type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base, int color)
+        public Pokemon(string name, Element type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base, int color)
         {
             Name = name;
             Type = type;
@@ -20,23 +21,23 @@ namespace Pokevmon
             Exp_Base = exp_base;
             Color = color;
         }
-        public Pokemon(string name, string type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base) : this( name, type, number, level, hp_base, speed_base, attack_base, defense_base, spattack_base, spdefense_base, exp_base,7) { }
-        public Pokemon(string name, string type, int number, int level) : this(name, type, number, level, 10, 10, 10, 10, 10, 10, 50, 7) { }
-        public Pokemon(string name, string type, int number) : this(name, type, number, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
-        public Pokemon() : this("Substitute", "no", 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon(string name, Element type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base) : this( name, type, number, level, hp_base, speed_base, attack_base, defense_base, spattack_base, spdefense_base, exp_base,7) { }
+        public Pokemon(string name, Element type, int number, int level) : this(name, type, number, level, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon(string name, Element type, int number) : this(name, type, number, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon() : this("Substitute", Element.Normal , 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
         #endregion
 
-        #region Pokemon information
+        #region General information
 
         public string Name { get; set; }
         public string[,] Sprite { get; set; }
-        public string Type { get; set; }
+        public Element Type { get; set; }
         public int Number { get; set; }
         public int Color { get; set; }
 
         #endregion
 
-        #region Pokemon static stats
+        #region Static stats
 
         private int hp_Base;
         private int attack_Base;
@@ -59,7 +60,7 @@ namespace Pokevmon
 
         #endregion
 
-        #region Pokemon relative stats
+        #region Relative stats
 
         public int HP_Full { get { return (HP_Base + 50) * Level / 50 + 10; } }
         public int Attack_Full { get { return Attack_Base * Level / 50 + 5; } }
@@ -73,7 +74,7 @@ namespace Pokevmon
 
         #endregion
 
-        #region Pokemon dynamic stats
+        #region Dynamic stats
 
         private double currentHP;
         private int currentExp;
@@ -89,60 +90,15 @@ namespace Pokevmon
             set {
                 //can't give pokemon higher levels than 100
                 if (value > 0 && value <= 100)
-                {
                     level = value;
-                }
             }
         }
 
         #endregion
 
-        #region Actions
-
-        public void LevelUp()
+        public Pokemon Clone()
         {
-            //up untill lvl 99, pokemon current hp will change relative to percentage
-            if (Level < 100)
-            {
-                CurrentHP = CurrentHP / HP_Full * ((HP_Base + 50) * (Level + 1) / 50 + 10);
-            }
-            Level++;
+            return (Pokemon)this.MemberwiseClone();
         }
-        public void EatRareCandy()
-        {
-            LevelUp();
-            CurrentExp = 0;
-        }
-        public void Heal()
-        {
-            CurrentHP = HP_Full;
-        }
-        public void DrinkPotion()
-        {
-            CurrentHP += 20;
-            if (CurrentHP > HP_Full)
-            {
-                CurrentHP = HP_Full;
-            }
-        }
-
-
-        public void ReceiveDmg(int damage)
-        {
-            CurrentHP -= damage;
-        }
-        public void ReceiveExp(int exp)
-        {
-            if (Level < 100)
-            {
-                CurrentExp += exp;
-                while (CurrentExp >= Exp_NextLvl)
-                {
-                    CurrentExp -= Exp_NextLvl;
-                    LevelUp();
-                }
-            }
-        }
-        #endregion
     }
 }
