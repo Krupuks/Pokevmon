@@ -6,32 +6,31 @@ namespace Pokevmon
     public class Pokemon
     {
         #region Constructors
-        public Pokemon(string name, Element type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base, int color)
+        public Pokemon(string name, int number, int level, int hp_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int speed_base, int exp_base, int color)
         {
             Name = name;
-            Type = type;
             Number = number;
             Level = level;
             HP_Base = hp_base;
-            Speed_Base = speed_base;
             Attack_Base = attack_base;
             Defense_Base = defense_base;
             SpAttack_Base = spattack_base;
             SpDefense_Base = spdefense_base;
+            Speed_Base = speed_base;
             Exp_Base = exp_base;
             Color = color;
         }
-        public Pokemon(string name, Element type, int number, int level, int hp_base, int speed_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int exp_base) : this( name, type, number, level, hp_base, speed_base, attack_base, defense_base, spattack_base, spdefense_base, exp_base,7) { }
-        public Pokemon(string name, Element type, int number, int level) : this(name, type, number, level, 10, 10, 10, 10, 10, 10, 50, 7) { }
-        public Pokemon(string name, Element type, int number) : this(name, type, number, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
-        public Pokemon() : this("Substitute", Element.Normal , 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon(string name, int number, int level, int hp_base, int attack_base, int defense_base, int spattack_base, int spdefense_base, int speed_base, int exp_base) : this( name, number, level, hp_base, speed_base, attack_base, defense_base, spattack_base, spdefense_base, exp_base,7) { }
+        public Pokemon(string name, int number, int level) : this(name, number, level, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon(string name, int number) : this(name, number, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
+        public Pokemon() : this("Substitute", 0, 1, 10, 10, 10, 10, 10, 10, 50, 7) { }
         #endregion
 
         #region General information
 
         public string Name { get; set; }
         public string[,] Sprite { get; set; }
-        public Element Type { get; set; }
+        public Element[] Type { get; set; }
         public int Number { get; set; }
         public int Color { get; set; }
 
@@ -68,7 +67,6 @@ namespace Pokevmon
         public int SpAttack_Full { get { return SpAttack_Base * Level / 50 + 5; } }
         public int SpDefense_Full { get { return SpDefense_Base * Level / 50 + 5; } }
         public int Speed_Full { get { return Speed_Base * Level / 50 + 5; } }
-        //Medium fast formula
         public int Exp_NextLvl { get { return (int)Math.Pow(Level + 1, 3) - (int)Math.Pow(Level, 3); } }
         public int Exp_Max { get { return (int)Math.Pow(Level, 3); } }
 
@@ -88,7 +86,6 @@ namespace Pokevmon
             get { return level;}
 
             set {
-                //can't give pokemon higher levels than 100
                 if (value > 0 && value <= 100)
                     level = value;
             }

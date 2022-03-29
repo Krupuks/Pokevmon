@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 
 namespace Pokevmon
 {
@@ -10,117 +10,47 @@ namespace Pokevmon
             Draw draw = new Draw();
             Pokedex pokedex = new Pokedex();
             Pokanics pokanics = new Pokanics();
+            List<Pokemon> list = pokedex.Party;
             string input = "";
-            int pageDex = 0;
-            int pageParty = 0;
             int WildLvlMin = 2;
             int WildLvlMax = 6;
 
-            //pokedex.caught[0] == pikachu
-            pokanics.Heal(pokedex.Caught[0]);
+            //pokedex.Party[0] == pikachu
+            pokanics.Heal(list[0]);
 
             //-------------GAME-LOOP-------------//
-            while (input != "exit" && input != "5")
+            while (input != "exit" && input != "q")
             {
-                Console.WriteLine("SELECTION SCREEN\n1.pokemon\n2.pokedex\n3.pokecenter\n4.battle\n5.exit");
-                input = Console.ReadLine();
-                Console.Clear();
-
+                //draw menu and returns input
+                input = draw.Menu("SELECTION SCREEN\n1.pokemon\n2.pokebox\n3.pokedex\n4.pokebag\n5.pokecenter\n6.battle\nq.exit");
                 //show pokemon party
                 if (input == "pokemon" || input == "1")
-                {
-                    while (input != "exit" && input != "6")
-                    {
-                        if (pageParty == pokedex.Caught.Count - 2)
-                            pageParty--;
-                        else if (pageParty == -1)
-                            pageParty++;
-
-                        int j = 0;
-                        for (int i = pageParty; i < pageParty + 3 && i < pokedex.Caught.Count ; i++)
-                        {
-                            draw.Stats(pokedex.Caught[i], j);
-                            j++;
-                        }
-
-                        Console.WriteLine("SELECTION SCREEN\n1.scroll up\n2.scroll down\n3.heal(Potion)\n4.rest(Full Restore)\n5.level(Rare Candy)\n6.exit");
-                        input = Console.ReadLine();
-
-                        if (input == "previous" || input == "1")
-                        {
-                            pageParty--;
-                        }
-                        else if (input == "next" || input == "2")
-                        {
-                            pageParty++;
-                        }
-                        Console.Clear();
-
-                        if (input == "heal" || input == "3")
-                            pokanics.DrinkPotion(pokedex.Caught[0]);
-
-
-                        if (input == "rest" || input == "4")
-                            pokanics.Heal(pokedex.Caught[0]);
-
-                        if (input == "level" || input == "5")
-                            pokanics.EatRareCandy(pokedex.Caught[0]);
-                        Console.Clear();
-                    }
-                }
+                    input = draw.ScrollMenu(input, pokedex.Party, true);
+                //show pokemon storage
+                else if (input == "pokebox" || input == "2")
+                    input = draw.ScrollMenu(input, pokedex.Caught, false);
                 //show all pokemon available in the program
-                else if (input == "pokedex" || input == "2")
-                {
-                    while (input != "exit" && input != "3")
-                    {
-                        if (pageDex == pokedex.Wild.Count - 2)
-                            pageDex--;
-                        else if (pageDex == -1)
-                            pageDex++;
-
-                        int j = 0;
-                        for (int i = pageDex; i < pageDex + 3; i++)
-                        {
-                            draw.DexStats(pokedex.Wild[i], j);
-                            j++;
-                        }
-
-                        Console.WriteLine("SELECTION SCREEN\n1.scroll up\n2.scroll down\n3.exit");
-
-                        input = Console.ReadLine();
-                        if (input == "previous" || input == "1")
-                        {
-                            pageDex--;
-                        }
-                        else if (input == "next" || input == "2")
-                        {
-                            pageDex++;
-                        }
-                        Console.Clear();
-                    }
-                }
+                else if (input == "pokedex" || input == "3")
+                    input = draw.ScrollMenu(input, pokedex.Wild, false);
+                //show items
+                else if (input == "pokebag" || input == "4")
+                    input = draw.Menu("ERROR: looks like this part hasn't been coded yet!");
                 //go to the pokemoncenter to heal your pokemon
-                else if (input == "pokecenter" || input == "3")
-                {
-                    pokanics.Heal(pokedex.Caught[0]);
-                    Console.WriteLine("Nurse Joy: your pokemon have been fully restored!");
-                    Console.ReadLine();
-                    Console.Clear();
-                }
+                else if (input == "pokecenter" || input == "5")
+                    pokanics.Pokecenter(pokedex);
                 //battle random pokemon with random levels between 1 and 5
-                else if (input == "battle" || input == "4")
+                else if (input == "battle" || input == "6")
                 {
                     int randomLvl = Random(WildLvlMin, WildLvlMax);
                     int randomPk = Random(0, pokedex.Wild.Count);
-
                     pokedex.Wild[randomPk].Level = randomLvl;
                     pokanics.Heal(pokedex.Wild[randomPk]);
-                    pokanics.Battle(pokedex.Caught[0], pokedex.Wild[randomPk], pokedex);
+                    pokanics.Battle(pokedex.Party[0], pokedex.Wild[randomPk], pokedex);
                 }
             }
         }
         //integer randomizer 
-        private static int Random(int x, int y)
+        public static int Random(int x, int y)
         {
             Random random = new Random();
             return random.Next(x, y);
@@ -128,7 +58,7 @@ namespace Pokevmon
     }
 }
 //VERSION 1.0 (creation)
-//menu loop
+//menu loop added
 //pokemon class with stats and UI possibilities
 //pokedex (list of all pokemon)
 //battle and healing system
@@ -155,9 +85,32 @@ namespace Pokevmon
 //mechanics like receivedmg, healing, lvling... are now stored in a seperate class (Pokanics)
 //pokedex now scrolls in segments (combined pages and scrolling)
 
+//VERSION 2.1 (fixes)
+//pokecenter now heals all your pokemons instead of just one
+//implemented a chance formula for catching pokemon
+//party and storage for pokemon are now seperate
+//added a menu and scrollmenu method to reduce code
+
+
 //TO DO'S
 //different moves (physical/special) -> class
-//move versus type effectiveness -> give pokemons arrays for type and moves aswell
+//move versus type effectiveness -> give pokemons arrays for types and moves
 //natures
 //evolution
 
+
+
+
+
+
+/*
+        else if (input == "heal" || input == "1")
+        pokanics.DrinkPotion(pokedex.Party[0]);
+
+    else if (input == "rest" || input == "2")
+        pokanics.Heal(pokedex.Party[0]);
+
+    else if (input == "level" || input == "3")
+        pokanics.EatRareCandy(pokedex.Party[0]);
+*/
+//how to get items? find/buy? -> pokemart + money system, then again how to get money? trainers?

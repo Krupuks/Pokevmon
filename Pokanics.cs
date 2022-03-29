@@ -18,9 +18,7 @@ namespace Pokevmon
             double CritChance = Random(0, 21);
             int critHit = 1;
             if (CritChance == 20)
-            {
                 critHit = 2;
-            }
             if (IsPhysical)
                 //code for physical attacks
                 damage = (int)(2 * offset * critHit * (attacker.Attack_Full / defender.Defense_Full) + 2);
@@ -28,126 +26,146 @@ namespace Pokevmon
                 //code for special attacks
                 damage = (int)(2 * offset * critHit * (attacker.SpAttack_Full / defender.SpDefense_Full) + 2);
             ReceiveDmg(defender, damage);
-
             if (defender.CurrentHP < 0)
-            {
                 defender.CurrentHP = 0;
-            }
-
         }
         //code for battling: two pokemons fight untill one faints
-        public void Battle(Pokemon pokemon1, Pokemon pokemon2, Pokedex pokedex)
+        public void Battle(Pokemon myPokemon, Pokemon wildPokemon, Pokedex pokedex)
         {
             Draw draw = new Draw();
             string input = "";
-            if (pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0)
+            if (myPokemon.CurrentHP > 0 && wildPokemon.CurrentHP > 0)
             {
                 bool isCaught = false;
+                bool fled = false;
                 bool firstTurn = true;
                 int coinFlip = 0;
 
                 //Visualize battle
                 Console.Clear();
-                draw.Battle(pokemon1, true);
-                draw.Battle(pokemon2, false);
+                draw.Battle(myPokemon, wildPokemon);
 
                 //battle loop
-                while (pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0 && !isCaught)
+                while (myPokemon.CurrentHP > 0 && wildPokemon.CurrentHP > 0 && !isCaught && !fled)
                 {
                     //code will run every 2 turns
                     if (firstTurn == true)
                     {
                         input = Console.ReadLine();
-                        if (input == "catch")
-                        {
-                            pokedex.Catch(pokemon2);
-                            isCaught = true;
-                        }
-                        if (!isCaught)
+                        if (input == "fight" || input == "FIGHT")
                         {
                             //speed will determine who will attack first: first pokemon will attack
-                            if (pokemon1.Speed_Full > pokemon2.Speed_Full)
-                                Attack(pokemon1, pokemon2, true);
+                            if (myPokemon.Speed_Full > wildPokemon.Speed_Full)
+                                Attack(myPokemon, wildPokemon, true);
                             //speed will determine who will attack first: second pokemon will attack
-                            else if (pokemon1.Speed_Full < pokemon2.Speed_Full)
-                                Attack(pokemon2, pokemon1, true);
+                            else if (myPokemon.Speed_Full < wildPokemon.Speed_Full)
+                                Attack(wildPokemon, myPokemon, true);
                             // if speed is equal, do a coinflip
                             else
                             {
                                 coinFlip = Random(0, 2);
                                 if (coinFlip == 0)
-                                    Attack(pokemon1, pokemon2, true);
+                                    Attack(myPokemon, wildPokemon, true);
                                 else if (coinFlip == 1)
-                                    Attack(pokemon2, pokemon1, true);
+                                    Attack(wildPokemon, myPokemon, true);
                             }
                             Console.Clear();
-                            draw.Battle(pokemon1, true);
-                            draw.Battle(pokemon2, false);
+                            draw.Battle(myPokemon, wildPokemon);
                             firstTurn = false;
                             Thread.Sleep(500);
                         }
+                        else if (input == "catch" || input == "CATCH")
+                        {
+                            isCaught = pokedex.Catch(wildPokemon);
 
+                            if (!isCaught)
+                            {
+                                Console.SetCursorPosition(3, 12);
+                                Console.Write($"{wildPokemon.Name} broke free!    ");
+                                Console.ReadLine();
+                                Console.Clear();
+                                draw.Battle(myPokemon, wildPokemon);
+                                Thread.Sleep(500);
+                                Attack(wildPokemon, myPokemon, true);
+                                Console.Clear();
+                                draw.Battle(myPokemon, wildPokemon);
+                            }
+                            else if (isCaught)
+                            {
+                                Console.SetCursorPosition(3, 12);
+                                Console.Write($"you succesfully caught {wildPokemon.Name}!");
+                                Console.SetCursorPosition(3, 13);
+                                Console.Write($"{wildPokemon.Name} has been added to the party");
+                            }
+                        }
+                        else if (input == "pokemon" || input == "POKEMON")
+                        {
+                            Console.Clear();
+                            draw.Stats(myPokemon,0);
+                            Console.ReadLine();
+                            Console.Clear();
+                        }
+                        else if (input == "run" || input == "RUN")
+                        {
+                            fled = true;
+                        }
                     }
                     //code will run every 2 turns, check if pokemon have fainted yet: if they did, code won't continue
-                    else if (firstTurn == false && pokemon1.CurrentHP > 0 && pokemon2.CurrentHP > 0)
+                    else if (firstTurn == false && myPokemon.CurrentHP > 0 && wildPokemon.CurrentHP > 0)
                     {
-                        //because pokemon1 started in the first turn, pokemon2 will attack
-                        if (pokemon1.Speed_Full > pokemon2.Speed_Full)
-                            Attack(pokemon2, pokemon1, true);
-
-                        //because pokemon2 started in the first turn, pokemon1 will attack
-                        else if (pokemon1.Speed_Full < pokemon2.Speed_Full)
-                            Attack(pokemon1, pokemon2, true);
+                        //because myPokemon started in the first turn, wildPokemon will attack
+                        if (myPokemon.Speed_Full > wildPokemon.Speed_Full)
+                            Attack(wildPokemon, myPokemon, true);
+                        //because wildPokemon started in the first turn, myPokemon will attack
+                        else if (myPokemon.Speed_Full < wildPokemon.Speed_Full)
+                            Attack(myPokemon, wildPokemon, true);
                         //in the second turn, the other pokemon will attack
                         else
                         {
                             if (coinFlip == 0)
-                                Attack(pokemon2, pokemon1, true);
+                                Attack(wildPokemon, myPokemon, true);
                             else if (coinFlip == 1)
-                                Attack(pokemon1, pokemon2, true);
+                                Attack(myPokemon, wildPokemon, true);
                         }
                         //Visualize battle
                         Console.Clear();
-                        draw.Battle(pokemon1, true);
-                        draw.Battle(pokemon2, false);
+                        draw.Battle(myPokemon, wildPokemon);
                         firstTurn = true;
                     }
                 }
-                //result = draw
-                if (isCaught)
+                if (fled)
                 {
                     Console.SetCursorPosition(3, 12);
-                    Console.Write($"you succesfully caught {pokemon2.Name}!");
-                    Console.SetCursorPosition(3, 13);
-                    Console.Write($"{pokemon2.Name} has been added to the party");
+                    Console.Write($"you succesfully escaped!");
                 }
-                else if (pokemon1.CurrentHP == 0 && pokemon2.CurrentHP == 0)
+                //result = draw
+                else if (myPokemon.CurrentHP == 0 && wildPokemon.CurrentHP == 0)
                 {
                     Console.SetCursorPosition(3, 12);
-                    Console.Write($"both {pokemon1.Name} and {pokemon2.Name} have fainted");
+                    Console.Write($"both {myPokemon.Name} and {wildPokemon.Name} have fainted");
                     Console.SetCursorPosition(3, 13);
                     Console.Write("THE BATTLE ENDED WITH A DRAW");
                 }
                 //result = lose
-                else if (pokemon1.CurrentHP == 0)
+                else if (myPokemon.CurrentHP == 0)
                 {
                     Console.SetCursorPosition(3, 12);
-                    Console.Write($"{pokemon1.Name} has fainted");
+                    Console.Write($"{myPokemon.Name} has fainted   ");
                     Console.SetCursorPosition(3, 13);
                     Console.Write("YOU LOST THE BATTLE");
                 }
                 //result = win
-                else
+                else if (wildPokemon.CurrentHP == 0)
                 {
                     Console.SetCursorPosition(3, 12);
-                    Console.Write($"{pokemon2.Name} has fainted");
+                    Console.Write($"{wildPokemon.Name} has fainted   ");
                     Console.SetCursorPosition(3, 13);
                     Console.Write("YOU WON THE BATTLE");
                     Console.ReadLine();
                     Console.SetCursorPosition(3, 14);
-                    if (pokemon2.Level < 100)
+                    if (wildPokemon.Level < 100)
                     {
-                        Console.Write($"{pokemon1.Name} received {ReceiveExp(pokemon1, pokemon2)} Exp");
+                        Console.Write($"{myPokemon.Name} received {ReceiveExp(myPokemon, wildPokemon)} Exp");
                     }
                 }
                 Console.ReadLine();
@@ -194,12 +212,23 @@ namespace Pokevmon
         {
             pokemon.CurrentHP = pokemon.HP_Full;
         }
+        public void Pokecenter(Pokedex pokedex)
+        {
+            for (int i = 0; i < pokedex.Party.Count; i++)
+            {
+                Heal(pokedex.Party[i]);
+            }
+            Console.WriteLine("Nurse Joy: your pokemon have been fully restored!");
+            Console.ReadLine();
+            Console.Clear();
+        }
         public void DrinkPotion(Pokemon pokemon)
         {
             pokemon.CurrentHP += 20;
             if (pokemon.CurrentHP > pokemon.HP_Full)
                 pokemon.CurrentHP = pokemon.HP_Full;
         }
+        //integer randomizer 
         private static int Random(int x, int y)
         {
             Random random = new Random();

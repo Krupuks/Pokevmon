@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{95ED20BF-FA84-48EE-B8D6-D0B2C58DB76B}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Pokanics.cs">
     <Files>
-      <File FileName="Program.cs" Line="162" Column="12" IsPinned="True" />
-      <File FileName="Pokemon.cs" IsPinned="True" />
-      <File FileName="Draw.cs" IsPinned="True" />
-      <File FileName="Pokedex.cs" />
-      <File FileName="Pokanics.cs" />
+      <File FileName="Program.cs" Line="87" Column="1" />
+      <File FileName="Pokemon.cs" />
+      <File FileName="Draw.cs" />
+      <File FileName="Pokedex.cs" Line="56" Column="20" NotebookId="1" />
+      <File FileName="Pokanics.cs" Line="230" Column="10" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Pokevmon PreferredExecutionTarget="MonoDevelop.Default" />
