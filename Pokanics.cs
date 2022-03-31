@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Pokevmon
@@ -26,14 +27,14 @@ namespace Pokevmon
                 //code for special attacks
                 damage = (int)(2 * offset * critHit * (attacker.SpAttack_Full / defender.SpDefense_Full) + 2);
             ReceiveDmg(defender, damage);
-            if (defender.CurrentHP < 0)
+            if (defender.CurrentHP < 1)
                 defender.CurrentHP = 0;
         }
         //code for battling: two pokemons fight untill one faints
         public void Battle(Pokemon myPokemon, Pokemon wildPokemon, Pokedex pokedex)
         {
             Draw draw = new Draw();
-            string input = "";
+            string input;
             if (myPokemon.CurrentHP > 0 && wildPokemon.CurrentHP > 0)
             {
                 bool isCaught = false;
@@ -92,6 +93,7 @@ namespace Pokevmon
                             }
                             else if (isCaught)
                             {
+                                wildPokemon.CurrentHP = 0;
                                 Console.SetCursorPosition(3, 12);
                                 Console.Write($"you succesfully caught {wildPokemon.Name}!");
                                 Console.SetCursorPosition(3, 13);
@@ -100,13 +102,29 @@ namespace Pokevmon
                         }
                         else if (input == "pokemon" || input == "POKEMON")
                         {
+                            do
+                            {
+                                Console.Clear();
+                                Console.WriteLine("which pokemon do you want to use? (1-6)");
+                                for (int i = 0; i < pokedex.Party.Count; i++)
+                                    Console.WriteLine($"{i + 1}.{pokedex.Party[i].Name}");
+
+                                int a = int.Parse(Console.ReadLine());
+                                myPokemon = pokedex.Party[a - 1];
+                                if (myPokemon.CurrentHP == 0)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("This pokemon is unable to battle!\nSelect another one");
+                                    Console.ReadLine();
+                                }
+                            } while (myPokemon.CurrentHP == 0);
                             Console.Clear();
-                            draw.Stats(myPokemon,0);
-                            Console.ReadLine();
-                            Console.Clear();
+                            draw.Battle(myPokemon, wildPokemon);
+                            firstTurn = false;
                         }
                         else if (input == "run" || input == "RUN")
                         {
+                            wildPokemon.CurrentHP = 0;
                             fled = true;
                         }
                     }
@@ -155,7 +173,7 @@ namespace Pokevmon
                     Console.Write("YOU LOST THE BATTLE");
                 }
                 //result = win
-                else if (wildPokemon.CurrentHP == 0)
+                else if (wildPokemon.CurrentHP == 0 && !isCaught && !fled)
                 {
                     Console.SetCursorPosition(3, 12);
                     Console.Write($"{wildPokemon.Name} has fainted   ");
@@ -171,12 +189,48 @@ namespace Pokevmon
                 Console.ReadLine();
                 Console.Clear();
             }
-            // if your pokemons are low, don't start a battle
-            else
+        }
+        //code for battling wild pokemon with party
+        public void BattleWild(int WildLvlMin, int WildLvlMax, Pokedex pokedex)
+        {
+            Pokanics pokanics = new Pokanics();
+            int randomLvl = Random(WildLvlMin, WildLvlMax);
+            int randomPk = Random(0, pokedex.Wild.Count);
+            int knockOut = 0;
+            pokedex.Wild[randomPk].Level = randomLvl;
+            pokanics.Heal(pokedex.Wild[randomPk]);
+
+            //count how many pokemons have been knocked out
+            for (int i = 0; i < pokedex.Party.Count; i++)
+            {
+                if (pokedex.Party[i].CurrentHP == 0)
+                    knockOut++;
+            }
+            //if all pokemons are knocked out, battle ends
+            if (knockOut == pokedex.Party.Count)
             {
                 Console.WriteLine("Your Pokemon(s) are unable to battle!");
                 Console.ReadLine();
                 Console.Clear();
+            }
+            //if party pokemon faints, next pokemon will take over
+            for (int j = 0; j < pokedex.Party.Count - 1; j++)
+            {
+                for (int i = 0; i < pokedex.Party.Count; i++)
+                {
+                    if (pokedex.Party[i].CurrentHP > 0)
+                    {
+                        pokanics.Battle(pokedex.Party[i], pokedex.Wild[randomPk], pokedex);
+                    }
+                }
+            }
+            //if wild pokemon faints, battle ends
+            for (int i = 0; i < pokedex.Party.Count; i++)
+            {
+                if (pokedex.Wild[randomPk].CurrentHP == 0)
+                {
+                    i = pokedex.Party.Count;
+                }
             }
         }
         //code for experience calculation (victor, loser)
@@ -203,6 +257,7 @@ namespace Pokevmon
                 pokemon.CurrentHP = pokemon.CurrentHP / pokemon.HP_Full * ((pokemon.HP_Base + 50) * (pokemon.Level + 1) / 50 + 10);
             pokemon.Level++;
         }
+
         public void EatRareCandy(Pokemon pokemon)
         {
             LevelUp(pokemon);
@@ -212,12 +267,15 @@ namespace Pokevmon
         {
             pokemon.CurrentHP = pokemon.HP_Full;
         }
-        public void Pokecenter(Pokedex pokedex)
+        public void HealAll(List<Pokemon> list)
         {
-            for (int i = 0; i < pokedex.Party.Count; i++)
-            {
-                Heal(pokedex.Party[i]);
-            }
+            for (int i = 0; i < list.Count; i++)
+                Heal(list[i]);
+        }
+        public void Pokecenter(List<Pokemon> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+                Heal(list[i]);
             Console.WriteLine("Nurse Joy: your pokemon have been fully restored!");
             Console.ReadLine();
             Console.Clear();
@@ -227,6 +285,17 @@ namespace Pokevmon
             pokemon.CurrentHP += 20;
             if (pokemon.CurrentHP > pokemon.HP_Full)
                 pokemon.CurrentHP = pokemon.HP_Full;
+        }
+        //swap pokemon in party
+        public void Swap(int a, int b, List<Pokemon> list)
+        {
+            Pokemon temp = list[a];
+            list[a] = list[b];
+            list[b] = temp;
+        }
+        public void Remove(int a, List<Pokemon> list)
+        {
+            list.Remove(list[a]);
         }
         //integer randomizer 
         private static int Random(int x, int y)

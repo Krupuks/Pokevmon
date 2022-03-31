@@ -34,7 +34,7 @@ namespace Pokevmon
         #endregion
 
         #region Pokemon
-        private static int size = 17; //increase size if more data is needed during display
+        private static int size = 17;
         private void FullStat(int Full, char x, int pos, int nr)
         {
             Console.SetCursorPosition(8, 5 + size * nr + pos);
@@ -155,41 +155,64 @@ namespace Pokevmon
         public string ScrollMenu(string input, List<Pokemon> list, bool details)
         {
             Draw draw = new Draw();
+            Pokanics pokanics = new Pokanics();
             int page = 0;
 
-            while (input != "exit" && input != "q")
+            while (list.Count != 0 && input != "exit" && input != "q")
             {
-                while (list.Count != 0 && input != "q")
+                int j = 0;
+                for (int i = page; i < list.Count && i < page + 3; i++)
                 {
-                    int j = 0;
-                    for (int i = page; i < list.Count && i < page + 3; i++)
+                    if (details)
+                        draw.Stats(list[i], j);
+                    else
+                        draw.DexStats(list[i], j);
+                    j++;
+                }
+                Console.WriteLine("SELECTION SCREEN\n1.scroll up\n2.scroll down");
+                if (details)
+                    Console.WriteLine("3.swap");
+                Console.WriteLine("4.release");
+                Console.WriteLine("q.exit");
+                input = Console.ReadLine();
+                Console.Clear();
+
+                if (input == "previous" || input == "1")
+                    page--;
+                else if (input == "next" || input == "2")
+                    page++;
+                else if (details)
+                {
+                    if (input == "3" || input == "swap")
                     {
-                        if (details)
-                            draw.Stats(list[i], j);
-                        else
-                            draw.DexStats(list[i], j);
-                        j++;
+                        Console.WriteLine("which pokemon do you want to move? (1-6)");
+                        for (int i = 0; i < list.Count; i++)
+                            Console.WriteLine($"{i + 1}.{list[i].Name}");
+                        int a = int.Parse(Console.ReadLine());
+                        Console.WriteLine("which pokemon do you want to replace it with? (1-6)");
+                        int b = int.Parse(Console.ReadLine());
+                        pokanics.Swap(a - 1, b - 1, list);
                     }
-                    input = draw.Menu("SELECTION SCREEN\n1.scroll up\n2.scroll down\nq.exit");
-                    if (input == "previous" || input == "1")
-                        page--;
-                    else if (input == "next" || input == "2")
-                        page++;
-
-                    if (page >= list.Count - 2)
-                        page = list.Count - 3;
-                    if (page <= -1)
-                        page = 0;
-
-                    Console.Clear();
+                    if (input == "4" || input == "release")
+                    {
+                        Console.WriteLine("which pokemon do you want to release? (1-6)");
+                        for (int i = 0; i < list.Count; i++)
+                            Console.WriteLine($"{i + 1}.{list[i].Name}");
+                        int a = int.Parse(Console.ReadLine());
+                        pokanics.Remove(a - 1, list);
+                    }
                 }
-                if (list.Count == 0)
-                {
-                    Console.WriteLine("Looks kind of empty in here!");
-                    input = "q";
-                    Console.ReadLine();
-                    Console.Clear();
-                }
+                if (page >= list.Count - 2)
+                    page = list.Count - 3;
+                if (page <= -1)
+                    page = 0;
+                Console.Clear();
+            }
+            if (list.Count == 0)
+            {
+                Console.WriteLine("Looks kind of empty in here!");
+                Console.ReadLine();
+                Console.Clear();
             }
             return "";
         }

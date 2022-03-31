@@ -7,16 +7,14 @@ namespace Pokevmon
     {
         static void Main(string[] args)
         {
+            string input = "";
             Draw draw = new Draw();
             Pokedex pokedex = new Pokedex();
             Pokanics pokanics = new Pokanics();
-            List<Pokemon> list = pokedex.Party;
-            string input = "";
-            int WildLvlMin = 2;
-            int WildLvlMax = 6;
-
-            //pokedex.Party[0] == pikachu
-            pokanics.Heal(list[0]);
+            List<Pokemon> Party = pokedex.Party;
+            List<Pokemon> Caught = pokedex.Caught;
+            List<Pokemon> Wild = pokedex.Wild;
+            pokanics.HealAll(Party);
 
             //-------------GAME-LOOP-------------//
             while (input != "exit" && input != "q")
@@ -25,28 +23,22 @@ namespace Pokevmon
                 input = draw.Menu("SELECTION SCREEN\n1.pokemon\n2.pokebox\n3.pokedex\n4.pokebag\n5.pokecenter\n6.battle\nq.exit");
                 //show pokemon party
                 if (input == "pokemon" || input == "1")
-                    input = draw.ScrollMenu(input, pokedex.Party, true);
+                    input = draw.ScrollMenu(input, Party, true);
                 //show pokemon storage
                 else if (input == "pokebox" || input == "2")
-                    input = draw.ScrollMenu(input, pokedex.Caught, false);
+                    input = draw.ScrollMenu(input, Caught, false);
                 //show all pokemon available in the program
                 else if (input == "pokedex" || input == "3")
-                    input = draw.ScrollMenu(input, pokedex.Wild, false);
-                //show items
+                    input = draw.ScrollMenu(input, Wild, false);
+                //show items (not coded yet)
                 else if (input == "pokebag" || input == "4")
                     input = draw.Menu("ERROR: looks like this part hasn't been coded yet!");
                 //go to the pokemoncenter to heal your pokemon
                 else if (input == "pokecenter" || input == "5")
-                    pokanics.Pokecenter(pokedex);
+                    pokanics.Pokecenter(Party);
                 //battle random pokemon with random levels between 1 and 5
                 else if (input == "battle" || input == "6")
-                {
-                    int randomLvl = Random(WildLvlMin, WildLvlMax);
-                    int randomPk = Random(0, pokedex.Wild.Count);
-                    pokedex.Wild[randomPk].Level = randomLvl;
-                    pokanics.Heal(pokedex.Wild[randomPk]);
-                    pokanics.Battle(pokedex.Party[0], pokedex.Wild[randomPk], pokedex);
-                }
+                    pokanics.BattleWild(2,10, pokedex);
             }
         }
         //integer randomizer 
@@ -91,17 +83,16 @@ namespace Pokevmon
 //party and storage for pokemon are now seperate
 //added a menu and scrollmenu method to reduce code
 
+//VERSION 2.2 (fixes)
+//you can now swap pokemons in party and storage
+//the whole party can battle now, when pokemons faint, next in party will continue battling, you can swap pokemons mid-battle
+
 
 //TO DO'S
 //different moves (physical/special) -> class
 //move versus type effectiveness -> give pokemons arrays for types and moves
 //natures
 //evolution
-
-
-
-
-
 
 /*
         else if (input == "heal" || input == "1")

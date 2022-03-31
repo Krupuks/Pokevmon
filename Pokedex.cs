@@ -58,13 +58,6 @@ namespace Pokevmon
             }
             return false;
         }
-        //swap pokemon in party
-        public void PartySwap(int a, int b)
-        {
-            Pokemon temp = Party[a];
-            Party[a] = Party[b];
-            Party[b] = temp;
-        }
         //integer randomizer 
         private static int Random(int x, int y)
         {
