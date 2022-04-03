@@ -14,6 +14,9 @@ namespace Pokevmon
             List<Pokemon> Party = pokedex.Party;
             List<Pokemon> Caught = pokedex.Caught;
             List<Pokemon> Wild = pokedex.Wild;
+            List<Pokemon> route101 = pokedex.route101;
+            List<Pokemon> viridianforest = pokedex.viridianforest;
+            List<Pokemon> digletttunel = pokedex.digletttunel;
             pokanics.HealAll(Party);
 
             //-------------GAME-LOOP-------------//
@@ -21,31 +24,44 @@ namespace Pokevmon
             {
                 //draw menu and returns input
                 input = draw.Menu("SELECTION SCREEN\n1.pokemon\n2.pokebox\n3.pokedex\n4.pokebag\n5.pokecenter\n6.battle\nq.exit");
-                //show pokemon party
-                if (input == "pokemon" || input == "1")
-                    input = draw.ScrollMenu(input, Party, true);
-                //show pokemon storage
-                else if (input == "pokebox" || input == "2")
-                    input = draw.ScrollMenu(input, Caught, false);
-                //show all pokemon available in the program
-                else if (input == "pokedex" || input == "3")
-                    input = draw.ScrollMenu(input, Wild, false);
-                //show items (not coded yet)
-                else if (input == "pokebag" || input == "4")
-                    input = draw.Menu("ERROR: looks like this part hasn't been coded yet!");
-                //go to the pokemoncenter to heal your pokemon
-                else if (input == "pokecenter" || input == "5")
-                    pokanics.Pokecenter(Party);
-                //battle random pokemon with random levels between 1 and 5
-                else if (input == "battle" || input == "6")
-                    pokanics.BattleWild(2,10, pokedex);
+                switch (input)
+                {
+                    case "1":
+                    case "pokemon":
+                        input = draw.ScrollMenu(input, Party, true);
+                        break;//show pokemon party
+                    case "2":
+                    case "pokebox":
+                        input = draw.ScrollMenu(input, Caught, false);
+                        break;//show pokemon storage
+                    case "3":
+                    case "pokedex":
+                        input = draw.ScrollMenu(input, Wild, false);
+                        break;//show all pokemon available in the program
+                    case "4":
+                    case "pokebag":
+                        input = draw.Menu("ERROR: looks like this part hasn't been coded yet!");
+                        break;//show items (not coded yet)
+                    case "5":
+                    case "pokecenter":
+                        pokanics.Pokecenter(Party);
+                        break;//go to the pokemoncenter to heal your pokemon
+                    case "6":
+                    case "route101":
+                        pokanics.Encounter(2, 5, route101, pokedex);
+                        break;//battle random pokemon with random levels between 1 and 5
+                    case "7":
+                    case "viridianforest":
+                    case "viridian forest":
+                        pokanics.Encounter(5, 10, viridianforest, pokedex);
+                        break;//battle random pokemon with random levels between 5 and 10
+                    case "8":
+                    case "digletttunnel":
+                    case "diglett tunnel":
+                        pokanics.Encounter(10, 20, digletttunel, pokedex);
+                        break;//battle random pokemon with random levels between 10 and 20
+                }
             }
-        }
-        //integer randomizer 
-        public static int Random(int x, int y)
-        {
-            Random random = new Random();
-            return random.Next(x, y);
         }
     }
 }
@@ -87,6 +103,9 @@ namespace Pokevmon
 //you can now swap pokemons in party and storage
 //the whole party can battle now, when pokemons faint, next in party will continue battling, you can swap pokemons mid-battle
 
+//VERSION 2.3 (fixes)
+//reworked main program from if/else if-statements to switch with cases
+//added more Pokemon (10 in total)
 
 //TO DO'S
 //different moves (physical/special) -> class
@@ -105,3 +124,5 @@ namespace Pokevmon
         pokanics.EatRareCandy(pokedex.Party[0]);
 */
 //how to get items? find/buy? -> pokemart + money system, then again how to get money? trainers?
+
+//made by Krupuk

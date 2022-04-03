@@ -1,23 +1,12 @@
 ﻿<Properties StartupConfiguration="{95ED20BF-FA84-48EE-B8D6-D0B2C58DB76B}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
     <Files>
-      <File FileName="Program.cs" Line="30" Column="28" />
+      <File FileName="Program.cs" Line="28" Column="18" />
       <File FileName="Pokemon.cs" />
-      <File FileName="Draw.cs" />
-      <File FileName="Pokedex.cs" Line="40" Column="18" NotebookId="1" />
+      <File FileName="Pokedex.cs" />
+      <File FileName="Draw.cs" Line="237" Column="39" NotebookId="1" />
       <File FileName="Pokanics.cs" NotebookId="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Pokevmon" expanded="True">
-            <Node name="Pokevmon" expanded="True">
-              <Node name="Program.cs" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Pokevmon PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

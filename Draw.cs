@@ -57,14 +57,15 @@ namespace Pokevmon
         }
         public void Stats(Pokemon pokemon, int layer)
         {
-            HorizontalLine(0, size * layer, 26, '-');
+            HorizontalLine(0, size * layer, 36, '-');
             if (pokemon.Type[1] == Element.None)
                 Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type[0]} Type\n\n\nExp to lvl:\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
             else
                 Console.WriteLine($"{pokemon.Name} lvl.{pokemon.Level}\n{pokemon.Type[0]} & {pokemon.Type[1]}\n\n\nExp to lvl:\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
 
+            VerticalLine(27, size * layer + 1, 3, '|');
             Sprite(pokemon, 18, 1 + size * layer, pokemon.Color, 0);
-            VerticalLine(26, size * layer, 18, '|');
+            Sprite(pokemon, 29, 1 + size * layer, pokemon.Color, 1);
             Console.SetCursorPosition(0, 4 + size * layer);
             Console.WriteLine($"{pokemon.CurrentExpTotal}/{pokemon.Exp_Max} exp");
             Console.SetCursorPosition(12, 6 + size * layer);
@@ -79,18 +80,19 @@ namespace Pokevmon
             FullStat(pokemon.SpAttack_Full, '█', 7, layer);
             FullStat(pokemon.SpDefense_Full, '█', 8, layer);
 
-            HorizontalLine(0, size * (layer + 1), 26, '-');
+            HorizontalLine(0, size * (layer + 1), 36, '-');
         }
         public void DexStats(Pokemon pokemon, int layer)
         {
-            HorizontalLine(0, size * layer, 26, '-');
+            HorizontalLine(0, size * layer, 36, '-');
             if (pokemon.Type[1] == Element.None)
                 Console.WriteLine($"\nNo.{pokemon.Number} {pokemon.Name}\n{pokemon.Type[0]} Type\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
             else
                 Console.WriteLine($"\nNo.{pokemon.Number} {pokemon.Name}\n{pokemon.Type[0]} & {pokemon.Type[1]}\n\n\nHP\nSpd\nAtt\nDef\nSpAtt\nSpDef\n\n\nTotal Basestats: {pokemon.TotalBase}\nAverage Basestats: {pokemon.AverageBase}");
 
+            VerticalLine(27, size * layer + 1, 3, '|');
             Sprite(pokemon, 18, 1 + size * layer, pokemon.Color, 0);
-            VerticalLine(26, size * layer, 18, '|');
+            Sprite(pokemon, 29, 1 + size * layer, pokemon.Color, 1);
             FullStat(pokemon.HP_Base, '█', 1, layer);
             FullStat(pokemon.Speed_Base, '█', 2, layer);
             FullStat(pokemon.Attack_Base, '█', 3, layer);
@@ -98,7 +100,7 @@ namespace Pokevmon
             FullStat(pokemon.SpAttack_Base, '█', 5, layer);
             FullStat(pokemon.SpDefense_Base, '█', 6, layer);
 
-            HorizontalLine(0, size * (layer + 1), 26, '-');
+            HorizontalLine(0, size * (layer + 1), 36, '-');
         }
         private void HealthBar(Pokemon pokemon, int posX, int posY)
         {

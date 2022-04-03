@@ -191,14 +191,14 @@ namespace Pokevmon
             }
         }
         //code for battling wild pokemon with party
-        public void BattleWild(int WildLvlMin, int WildLvlMax, Pokedex pokedex)
+        public void Encounter(int WildLvlMin, int WildLvlMax, List<Pokemon> localPokemon, Pokedex pokedex)
         {
             Pokanics pokanics = new Pokanics();
             int randomLvl = Random(WildLvlMin, WildLvlMax);
-            int randomPk = Random(0, pokedex.Wild.Count);
+            int randomPk = Random(0, localPokemon.Count);
             int knockOut = 0;
-            pokedex.Wild[randomPk].Level = randomLvl;
-            pokanics.Heal(pokedex.Wild[randomPk]);
+            localPokemon[randomPk].Level = randomLvl;
+            pokanics.Heal(localPokemon[randomPk]);
 
             //count how many pokemons have been knocked out
             for (int i = 0; i < pokedex.Party.Count; i++)
@@ -214,13 +214,13 @@ namespace Pokevmon
                 Console.Clear();
             }
             //if party pokemon faints, next pokemon will take over
-            for (int j = 0; j < pokedex.Party.Count - 1; j++)
+            for (int j = 0; j < pokedex.Party.Count; j++)
             {
                 for (int i = 0; i < pokedex.Party.Count; i++)
                 {
                     if (pokedex.Party[i].CurrentHP > 0)
                     {
-                        pokanics.Battle(pokedex.Party[i], pokedex.Wild[randomPk], pokedex);
+                        pokanics.Battle(pokedex.Party[i], localPokemon[randomPk], pokedex);
                     }
                 }
             }
