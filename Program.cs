@@ -8,57 +8,49 @@ namespace Pokevmon
         static void Main(string[] args)
         {
             string input = "";
-            Draw draw = new Draw();
-            Pokedex pokedex = new Pokedex();
-            Pokanics pokanics = new Pokanics();
-            List<Pokemon> Party = pokedex.Party;
-            List<Pokemon> Caught = pokedex.Caught;
-            List<Pokemon> Wild = pokedex.Wild;
-            List<Pokemon> route101 = pokedex.route101;
-            List<Pokemon> viridianforest = pokedex.viridianforest;
-            List<Pokemon> digletttunel = pokedex.digletttunel;
-            pokanics.HealAll(Party);
+            Pokanics.Heal(Pokedex.Party);
 
             //-------------GAME-LOOP-------------//
             while (input != "exit" && input != "q")
             {
                 //draw menu and returns input
-                input = draw.Menu("SELECTION SCREEN\n1.pokemon\n2.pokebox\n3.pokedex\n4.pokebag\n5.pokecenter\n6.battle\nq.exit");
+                input = Draw.Menu("SELECTION SCREEN\n1.pokemon\n2.pokebox\n3.pokedex\n4.pokebag\n5.pokecenter\n6.route 101\n7.viridian forest\n8.diglett tunnel\nq.exit");
                 switch (input)
                 {
                     case "1":
                     case "pokemon":
-                        input = draw.ScrollMenu(input, Party, true);
+                        input = Draw.ScrollMenu(input, Pokedex.Party, true);
                         break;//show pokemon party
                     case "2":
                     case "pokebox":
-                        input = draw.ScrollMenu(input, Caught, false);
+                        input = Draw.ScrollMenu(input, Pokedex.Caught, true);
                         break;//show pokemon storage
                     case "3":
                     case "pokedex":
-                        input = draw.ScrollMenu(input, Wild, false);
+                        input = Draw.ScrollMenu(input, Pokedex.Wild, false);
                         break;//show all pokemon available in the program
                     case "4":
                     case "pokebag":
-                        input = draw.Menu("ERROR: looks like this part hasn't been coded yet!");
+                        input = Draw.Menu("ERROR: looks like this part hasn't been coded yet!");
                         break;//show items (not coded yet)
                     case "5":
                     case "pokecenter":
-                        pokanics.Pokecenter(Party);
+                        Pokanics.Pokecenter(Pokedex.Party);
                         break;//go to the pokemoncenter to heal your pokemon
                     case "6":
                     case "route101":
-                        pokanics.Encounter(2, 5, route101, pokedex);
+                    case "route 101":
+                        Pokanics.Encounter(2, 5, Pokedex.route101);
                         break;//battle random pokemon with random levels between 1 and 5
                     case "7":
                     case "viridianforest":
                     case "viridian forest":
-                        pokanics.Encounter(5, 10, viridianforest, pokedex);
+                        Pokanics.Encounter(5, 10, Pokedex.viridianforest);
                         break;//battle random pokemon with random levels between 5 and 10
                     case "8":
                     case "digletttunnel":
                     case "diglett tunnel":
-                        pokanics.Encounter(10, 20, digletttunel, pokedex);
+                        Pokanics.Encounter(10, 20, Pokedex.digletttunel);
                         break;//battle random pokemon with random levels between 10 and 20
                 }
             }
@@ -105,7 +97,10 @@ namespace Pokevmon
 
 //VERSION 2.3 (fixes)
 //reworked main program from if/else if-statements to switch with cases
-//added more Pokemon (10 in total)
+//added more Pokemon (10 in total now)
+
+//VERSION 2.4 (fixes)
+//pokanics and draw classes are now completely static
 
 //TO DO'S
 //different moves (physical/special) -> class

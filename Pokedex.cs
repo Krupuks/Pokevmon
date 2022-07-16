@@ -13,16 +13,16 @@ namespace Pokevmon
          */
 
         //pokedex entries
-        public List<Pokemon> Caught = new();
-        public List<Pokemon> Party = new()
+        public static List<Pokemon> Caught = new();
+        public static List<Pokemon> Party = new()
         {
             new("Pikachu", 25, 5, 35, 90, 55, 40, 50, 50, 112, 14)
             {
                 Type = new Element[] { Element.Electric, Element.None },
-                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" |  =ϟ|" } }
+                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" | =ϟ=|" } }
             }
         };
-        public List<Pokemon> Wild = new()
+        public static List<Pokemon> Wild = new()
         {
             new("Bulbasaur", 1, 1, 45, 49, 49, 65, 65, 45, 64, 10)
             {
@@ -57,7 +57,7 @@ namespace Pokevmon
             new("Pikachu", 25, 1, 35, 55, 40, 50, 50, 90, 112, 14)
             {
                 Type = new Element[] { Element.Electric, Element.None },
-                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" |  =ϟ|" } }
+                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" | =ϟ=|" } }
             },
             new("Diglett", 50, 1, 10, 55, 25, 35, 45, 95, 53, 6)
             {
@@ -77,7 +77,7 @@ namespace Pokevmon
         };
 
         //local pokemon groups
-        public List<Pokemon> route101 = new()
+        public static List<Pokemon> route101 = new()
         {
             new("Pidgey", 16, 1, 40, 45, 40, 35, 35, 56, 50, 6)
             {
@@ -95,7 +95,7 @@ namespace Pokevmon
                 Sprite = new string[,] { { @"  .--.", @"@( 0ᴗ0)", @"\(/JOO)" }, { @"  .--.", @" (0___)@", @" ((###)/" } }
             },
         };
-        public List<Pokemon> viridianforest = new()
+        public static List<Pokemon> viridianforest = new()
         {
             new("Caterpie", 10, 1, 45, 30, 35, 20, 20, 45, 39, 10)
             {
@@ -110,7 +110,7 @@ namespace Pokevmon
             new("Pikachu", 25, 1, 35, 55, 40, 50, 50, 90, 112, 14)
             {
                 Type = new Element[] { Element.Electric, Element.None },
-                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" |  =ϟ|" } }
+                Sprite = new string[,] { { @" |\__/|", @" |๑0ᴥ0|", @"ϟ|JO_O|" }, { @" |\__/|", @" |    |", @" | =ϟ=|" } }
             },
             new("Bulbasaur", 1, 1, 45, 49, 49, 65, 65, 45, 64, 10)
             {
@@ -118,7 +118,7 @@ namespace Pokevmon
                 Sprite = new string[,] { { @" ,.^--^", @"( ( 0ᴗ0)", @" U-J--J" }, { @" ^--^,.", @"(0( ( ))", @" l-J--J" } }
             },
         };
-        public List<Pokemon> digletttunel = new()
+        public static List<Pokemon> digletttunel = new()
         {
             new("Diglett", 50, 1, 10, 55, 25, 35, 45, 95, 53, 6)
             {
@@ -133,7 +133,7 @@ namespace Pokevmon
         };
 
         //catch pokemon
-        public bool Catch(Pokemon pokemon)
+        public static bool Catch(Pokemon pokemon)
         {
             int catchRateReduction = (int)((10 * pokemon.HP_Full - pokemon.CurrentHP) * 100 / (10 * pokemon.HP_Full));
             if (Random(1, 101 - catchRateReduction) == 100 - catchRateReduction)

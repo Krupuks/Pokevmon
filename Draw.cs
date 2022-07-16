@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Pokevmon
 {
-    public class Draw
+    public abstract class Draw
     {
         #region Basic
-        static public void HorizontalLine(int posX, int posY, int length, char x)
+        public static void HorizontalLine(int posX, int posY, int length, char x)
         {
             for (int i = 0; i < length; i++)
             {
@@ -15,7 +15,7 @@ namespace Pokevmon
                 Console.WriteLine();
             }
         }
-        static public void VerticalLine(int posX, int posY, int length, char x)
+        public static void VerticalLine(int posX, int posY, int length, char x)
         {
             for (int i = 0; i < length; i++)
             {
@@ -24,7 +24,7 @@ namespace Pokevmon
                 Console.WriteLine();
             }
         }
-        static public void Border(int posX1, int posY1, int posX2, int posY2, char x)
+        public static void Border(int posX1, int posY1, int posX2, int posY2, char x)
         {
             HorizontalLine(posX1, posY1, posX2 - posX1, x);
             VerticalLine(posX1, posY1, posY2 - posY1 + 1, x);
@@ -35,7 +35,7 @@ namespace Pokevmon
 
         #region Pokemon
         private static int size = 17;
-        private void FullStat(int Full, char x, int pos, int nr)
+        private static void FullStat(int Full, char x, int pos, int nr)
         {
             Console.SetCursorPosition(8, 5 + size * nr + pos);
             Console.Write(Full);
@@ -45,7 +45,7 @@ namespace Pokevmon
                 Console.Write(x);
             }
         }
-        private void CurrentStat(int Current, char x, int pos, int nr)
+        private static void CurrentStat(int Current, char x, int pos, int nr)
         {
             Console.SetCursorPosition(4, 5 + size * nr + pos);
             Console.Write(Current + "/");
@@ -55,7 +55,7 @@ namespace Pokevmon
                 Console.Write(x);
             }
         }
-        public void Stats(Pokemon pokemon, int layer)
+        public static void Stats(Pokemon pokemon, int layer)
         {
             HorizontalLine(0, size * layer, 36, '-');
             if (pokemon.Type[1] == Element.None)
@@ -82,7 +82,7 @@ namespace Pokevmon
 
             HorizontalLine(0, size * (layer + 1), 36, '-');
         }
-        public void DexStats(Pokemon pokemon, int layer)
+        public static void DexStats(Pokemon pokemon, int layer)
         {
             HorizontalLine(0, size * layer, 36, '-');
             if (pokemon.Type[1] == Element.None)
@@ -102,7 +102,7 @@ namespace Pokevmon
 
             HorizontalLine(0, size * (layer + 1), 36, '-');
         }
-        private void HealthBar(Pokemon pokemon, int posX, int posY)
+        private static void HealthBar(Pokemon pokemon, int posX, int posY)
         {
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -119,7 +119,7 @@ namespace Pokevmon
             }
             Console.ResetColor();
         }
-        private void ExpBar(Pokemon pokemon, int posX, int posY)
+        private static void ExpBar(Pokemon pokemon, int posX, int posY)
         {
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             for (int i = 0; i < 10; i++)
@@ -136,7 +136,7 @@ namespace Pokevmon
             }
             Console.ResetColor();
         }
-        private void Sprite(Pokemon pokemon, int posX, int posY, int color, int perspective)
+        private static void Sprite(Pokemon pokemon, int posX, int posY, int color, int perspective)
         {
             Console.ForegroundColor = (ConsoleColor)color;
             for (int i = 0; i < 3; i++)
@@ -146,7 +146,7 @@ namespace Pokevmon
             }
             Console.ResetColor();
         }
-        public string Menu(string menu)
+        public static string Menu(string menu)
         {
             string input;
             Console.WriteLine(menu);
@@ -154,10 +154,8 @@ namespace Pokevmon
             Console.Clear();
             return input;
         }
-        public string ScrollMenu(string input, List<Pokemon> list, bool details)
+        public static string ScrollMenu(string input, List<Pokemon> list, bool details)
         {
-            Draw draw = new Draw();
-            Pokanics pokanics = new Pokanics();
             int page = 0;
 
             while (list.Count != 0 && input != "exit" && input != "q")
@@ -166,15 +164,17 @@ namespace Pokevmon
                 for (int i = page; i < list.Count && i < page + 3; i++)
                 {
                     if (details)
-                        draw.Stats(list[i], j);
+                        Stats(list[i], j);
                     else
-                        draw.DexStats(list[i], j);
+                        DexStats(list[i], j);
                     j++;
                 }
                 Console.WriteLine("SELECTION SCREEN\n1.scroll up\n2.scroll down");
                 if (details)
+                {
                     Console.WriteLine("3.swap");
-                Console.WriteLine("4.release");
+                    Console.WriteLine("4.release");
+                }
                 Console.WriteLine("q.exit");
                 input = Console.ReadLine();
                 Console.Clear();
@@ -187,13 +187,13 @@ namespace Pokevmon
                 {
                     if (input == "3" || input == "swap")
                     {
-                        Console.WriteLine("which pokemon do you want to move? (1-6)");
+                        Console.WriteLine($"which pokemon do you want to move? (1-{list.Count})");
                         for (int i = 0; i < list.Count; i++)
                             Console.WriteLine($"{i + 1}.{list[i].Name}");
                         int a = int.Parse(Console.ReadLine());
                         Console.WriteLine("which pokemon do you want to replace it with? (1-6)");
                         int b = int.Parse(Console.ReadLine());
-                        pokanics.Swap(a - 1, b - 1, list);
+                        Pokanics.Swap(a - 1, b - 1, list);
                     }
                     if (input == "4" || input == "release")
                     {
@@ -201,7 +201,7 @@ namespace Pokevmon
                         for (int i = 0; i < list.Count; i++)
                             Console.WriteLine($"{i + 1}.{list[i].Name}");
                         int a = int.Parse(Console.ReadLine());
-                        pokanics.Remove(a - 1, list);
+                        Pokanics.Remove(a - 1, list);
                     }
                 }
                 if (page >= list.Count - 2)
@@ -218,7 +218,7 @@ namespace Pokevmon
             }
             return "";
         }
-        public void Battle(Pokemon myPokemon, Pokemon wildPokemon)
+        public static void Battle(Pokemon myPokemon, Pokemon wildPokemon)
         {
             Border(1, 10, 63, 15, '░');
             Border(40, 10, 63, 15, '░');
